@@ -1,0 +1,135 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle with Gradient -->
+  <defs>
+    <linearGradient id="genieBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#66FCF1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1E90FF;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFA500;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <circle cx="100" cy="100" r="95" fill="rgba(102, 252, 241, 0.05)"/>
+  <circle cx="100" cy="100" r="85" stroke="url(#genieBlue)" stroke-width="1.5" fill="none" opacity="0.3"/>
+
+  <!-- Genie Character Group -->
+  <g transform="translate(50, 25)">
+
+    <!-- Tail - flowing behind -->
+    <path d="M50 140 Q30 150, 25 170 Q20 185, 30 195"
+          stroke="url(#genieBlue)"
+          stroke-width="18"
+          fill="none"
+          stroke-linecap="round"
+          opacity="0.8"
+          filter="url(#softGlow)"/>
+
+    <!-- Body -->
+    <ellipse cx="60" cy="130" rx="28" ry="35" fill="url(#genieBlue)" filter="url(#softGlow)"/>
+
+    <!-- Chest muscles definition -->
+    <path d="M45 120 Q60 115, 75 120" stroke="#1E90FF" stroke-width="2" fill="none" opacity="0.3"/>
+
+    <!-- Arms -->
+    <!-- Left arm holding lamp -->
+    <path d="M35 115 Q15 105, 20 85" stroke="url(#genieBlue)" stroke-width="12" fill="none" stroke-linecap="round" filter="url(#softGlow)"/>
+    <!-- Right arm gesturing -->
+    <path d="M85 115 Q105 105, 110 90" stroke="url(#genieBlue)" stroke-width="12" fill="none" stroke-linecap="round" filter="url(#softGlow)"/>
+
+    <!-- Bracelets -->
+    <ellipse cx="22" cy="92" rx="6" ry="4" fill="url(#goldGradient)" filter="url(#glow)"/>
+    <ellipse cx="108" cy="95" rx="6" ry="4" fill="url(#goldGradient)" filter="url(#glow)"/>
+
+    <!-- Hands -->
+    <circle cx="20" cy="85" r="7" fill="url(#genieBlue)"/>
+    <circle cx="110" cy="90" r="7" fill="url(#genieBlue)"/>
+
+    <!-- Magic Lamp (held in left hand) -->
+    <g transform="translate(8, 72) rotate(-20)">
+      <!-- Lamp body -->
+      <ellipse cx="8" cy="8" rx="12" ry="8" fill="url(#goldGradient)" filter="url(#glow)"/>
+      <!-- Lamp spout -->
+      <path d="M18 5 Q28 0, 30 -5" stroke="url(#goldGradient)" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <!-- Lamp handle -->
+      <path d="M-2 5 Q-8 0, -8 -5" stroke="url(#goldGradient)" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <!-- Lamp base -->
+      <ellipse cx="8" cy="14" rx="10" ry="3" fill="url(#goldGradient)" opacity="0.8"/>
+    </g>
+
+    <!-- Smoke from lamp -->
+    <path d="M25 70 Q20 55, 30 45" stroke="#A0A0A0" stroke-width="3" fill="none" opacity="0.5" stroke-linecap="round"/>
+    <path d="M28 68 Q35 50, 40 40" stroke="#A0A0A0" stroke-width="2" fill="none" opacity="0.4" stroke-linecap="round"/>
+
+    <!-- Sparkles around smoke -->
+    <path d="M32 42 L34 46 L38 48 L34 50 L32 54 L30 50 L26 48 L30 46 Z" fill="#FFD700" filter="url(#glow)"/>
+    <path d="M42 38 L43 41 L46 42 L43 43 L42 46 L41 43 L38 42 L41 41 Z" fill="#FFD700" filter="url(#glow)"/>
+
+    <!-- Head -->
+    <ellipse cx="60" cy="70" rx="30" ry="28" fill="url(#genieBlue)" filter="url(#softGlow)"/>
+
+    <!-- Pointed ears -->
+    <path d="M32 65 Q25 55, 28 45" stroke="url(#genieBlue)" stroke-width="10" fill="none" stroke-linecap="round"/>
+    <path d="M88 65 Q95 55, 92 45" stroke="url(#genieBlue)" stroke-width="10" fill="none" stroke-linecap="round"/>
+
+    <!-- Earrings -->
+    <circle cx="30" cy="70" r="4" fill="url(#goldGradient)" filter="url(#glow)"/>
+    <circle cx="90" cy="70" r="4" fill="url(#goldGradient)" filter="url(#glow)"/>
+    <circle cx="30" cy="78" r="2.5" fill="#0B0C10"/>
+    <circle cx="90" cy="78" r="2.5" fill="#0B0C10"/>
+
+    <!-- Hair tuft -->
+    <path d="M60 45 Q58 35, 62 30 Q66 35, 64 45" fill="#0B0C10"/>
+    <circle cx="62" cy="30" r="3" fill="url(#goldGradient)" filter="url(#glow)"/>
+
+    <!-- Eyebrows -->
+    <path d="M45 60 Q52 57, 58 60" stroke="#0B0C10" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M62 60 Q68 57, 75 60" stroke="#0B0C10" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+    <!-- Eyes -->
+    <ellipse cx="50" cy="68" rx="7" ry="8" fill="white"/>
+    <ellipse cx="70" cy="68" rx="7" ry="8" fill="white"/>
+    <circle cx="50" cy="69" r="4" fill="#0B0C10"/>
+    <circle cx="70" cy="69" r="4" fill="#0B0C10"/>
+    <circle cx="51" cy="67" r="1.5" fill="white"/>
+    <circle cx="71" cy="67" r="1.5" fill="white"/>
+
+    <!-- Nose -->
+    <ellipse cx="60" cy="78" rx="3" ry="2" fill="#1E90FF" opacity="0.5"/>
+
+    <!-- Big smile -->
+    <path d="M45 85 Q60 98, 75 85" stroke="#0B0C10" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M48 86 Q60 95, 72 86" fill="white" opacity="0.3"/>
+
+    <!-- Beard -->
+    <path d="M55 92 Q52 98, 50 102" stroke="#0B0C10" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M50 102 Q48 105, 50 108" stroke="#0B0C10" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M60 92 Q60 100, 58 105" stroke="#0B0C10" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M65 92 Q68 98, 70 102" stroke="#0B0C10" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M70 102 Q72 105, 70 108" stroke="#0B0C10" stroke-width="2" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- HelpGenie Text -->
+  <text x="100" y="175" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="#66FCF1" text-anchor="middle" filter="url(#glow)">
+    HelpGenie
+  </text>
+  <text x="100" y="192" font-family="Arial, sans-serif" font-size="9" fill="#C5C6C7" text-anchor="middle">
+    AI Customer Support
+  </text>
+</svg>

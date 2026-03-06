@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="userGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#45A29E"/>
+      <stop offset="100%" style="stop-color:#66FCF1"/>
+    </linearGradient>
+  </defs>
+  <circle cx="100" cy="100" r="95" fill="#1F2833" stroke="url(#userGradient)" stroke-width="3"/>
+  <!-- Person silhouette -->
+  <circle cx="100" cy="75" r="35" fill="url(#userGradient)" opacity="0.8"/>
+  <path d="M 40 170 Q 40 130 100 130 Q 160 130 160 170" fill="url(#userGradient)" opacity="0.8"/>
+</svg>

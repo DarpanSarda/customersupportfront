@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120" width="400" height="120">
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#66FCF1"/>
+      <stop offset="100%" style="stop-color:#45A29E"/>
+    </linearGradient>
+  </defs>
+  <!-- Robot head -->
+  <rect x="30" y="30" width="60" height="50" rx="10" fill="none" stroke="url(#logoGradient)" stroke-width="4"/>
+  <!-- Eyes -->
+  <rect x="42" y="45" width="12" height="12" rx="3" fill="url(#logoGradient)"/>
+  <rect x="66" y="45" width="12" height="12" rx="3" fill="url(#logoGradient)"/>
+  <!-- Smile -->
+  <path d="M 45 68 Q 60 78 75 68" stroke="url(#logoGradient)" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- Antenna -->
+  <line x1="60" y1="30" x2="60" y2="15" stroke="url(#logoGradient)" stroke-width="3"/>
+  <circle cx="60" cy="12" r="5" fill="url(#logoGradient)"/>
+  <!-- Text -->
+  <text x="110" y="55" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="url(#logoGradient)">ChatBot</text>
+  <text x="110" y="80" font-family="Arial, sans-serif" font-size="14" fill="#C5C6C7">Customer Support</text>
+  <!-- Chat bubble decoration -->
+  <circle cx="330" cy="35" r="8" fill="url(#logoGradient)" opacity="0.5"/>
+  <circle cx="355" cy="50" r="5" fill="url(#logoGradient)" opacity="0.3"/>
+  <circle cx="340" cy="70" r="6" fill="url(#logoGradient)" opacity="0.4"/>
+</svg>
