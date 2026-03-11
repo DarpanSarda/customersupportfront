@@ -1,4 +1,27 @@
 import { requireAuth } from '@/lib/auth'
+import { createClient } from '@supabase/supabase-js'
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+)
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL
+
+// Helper function to get tenant_id from chatbot_id
+async function getTenantId(chatbotId) {
+  const { data: chatbot, error } = await supabase
+    .from('chatbots')
+    .select('tenant_id')
+    .eq('id', chatbotId)
+    .single()
+
+  if (error || !chatbot) {
+    return null
+  }
+
+  return chatbot.tenant_id || chatbotId
+}
 
 // POST - Bulk import FAQs
 export async function POST(request, { params }) {
@@ -11,60 +34,66 @@ export async function POST(request, { params }) {
   const { id } = await params
 
   try {
-    const body = await request.json()
-    const { faqs } = body
+    // Get tenant_id from chatbot
+    const tenantId = await getTenantId(id)
 
-    if (!faqs || !Array.isArray(faqs) || faqs.length === 0) {
+    if (!tenantId) {
       return Response.json(
-        { error: 'FAQs array is required' },
+        { error: 'Chatbot not found' },
+        { status: 404 }
+      )
+    }
+
+    // Get the file from the form data
+    const formData = await request.formData()
+    const file = formData.get('file')
+
+    if (!file) {
+      return Response.json(
+        { error: 'File is required' },
         { status: 400 }
       )
     }
 
-    // Validate each FAQ
-    for (const faq of faqs) {
-      if (!faq.question || !faq.answer) {
-        return Response.json(
-          { error: 'Each FAQ must have a question and answer' },
-          { status: 400 }
-        )
-      }
+    // Forward the file to the external API
+    const externalFormData = new FormData()
+    externalFormData.append('file', file)
+
+    const response = await fetch(`${API_URL}faq/bulk?tenant_id=${tenantId}`, {
+      method: 'POST',
+      body: externalFormData
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.detail || 'Failed to import FAQs')
     }
 
-    // For now, return mock response
-    const createdFaqs = faqs.map((faq, index) => ({
-      id: Date.now().toString() + index,
-      question: faq.question,
-      answer: faq.answer,
-      category: faq.category || 'General',
-      order_index: faq.order_index || index + 1,
-      is_active: true,
-      created_at: new Date().toISOString()
-    }))
+    const result = await response.json()
 
-    // In production, you would do a bulk insert:
-    // const { data, error } = await supabase
-    //   .from('faqs')
-    //   .insert(
-    //     faqs.map(faq => ({
-    //       chatbot_id: id,
-    //       question: faq.question,
-    //       answer: faq.answer,
-    //       category: faq.category || 'General',
-    //       order_index: faq.order_index || 0
-    //     }))
-    //   )
-    //   .select()
+    // Fetch the newly created FAQs to return to the client
+    const faqsResponse = await fetch(`${API_URL}faq/${tenantId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    const faqs = faqsResponse.ok ? await faqsResponse.json() : []
 
     return Response.json({
-      message: `${createdFaqs.length} FAQs imported successfully`,
-      faqs: createdFaqs
+      message: `${result.created || 0} FAQs imported successfully`,
+      faqs: faqs.map(f => ({
+        ...f,
+        is_active: true,
+        created_at: f.created_at || new Date().toISOString()
+      }))
     })
 
   } catch (error) {
     console.error('FAQ bulk import error:', error)
     return Response.json(
-      { error: 'Failed to import FAQs' },
+      { error: error.message || 'Failed to import FAQs' },
       { status: 500 }
     )
   }

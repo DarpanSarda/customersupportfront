@@ -204,7 +204,7 @@ const DashboardPage = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="p-2 rounded-full relative"
-              style={{ backgroundColor: theme === 'dark' ? 'rgba(20, 184, 166, 0.1)' : 'rgba(20, 184, 166, 0.1)' }}
+              style={{ backgroundColor: theme === 'dark' ? 'rgba(139, 92, 246, 0.1)' : 'rgba(139, 92, 246, 0.1)' }}
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: colors.accent }}>
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
@@ -270,7 +270,7 @@ const DashboardPage = () => {
                 whileFocus={{
                   scale: 1.01,
                   borderColor: colors.accent,
-                  boxShadow: theme === 'dark' ? '0 0 20px rgba(20, 184, 166, 0.2)' : '0 0 20px rgba(20, 184, 166, 0.2)'
+                  boxShadow: theme === 'dark' ? '0 0 20px rgba(139, 92, 246, 0.2)' : '0 0 20px rgba(139, 92, 246, 0.2)'
                 }}
                 transition={{ type: 'spring', stiffness: 300 }}
               />
@@ -288,7 +288,7 @@ const DashboardPage = () => {
               }}
               whileHover={{
                 scale: 1.02,
-                boxShadow: theme === 'dark' ? '0 0 30px rgba(20, 184, 166, 0.4)' : '0 0 30px rgba(20, 184, 166, 0.3)'
+                boxShadow: theme === 'dark' ? '0 0 30px rgba(139, 92, 246, 0.4)' : '0 0 30px rgba(139, 92, 246, 0.3)'
               }}
               whileTap={{ scale: 0.98 }}
               transition={{ type: 'spring', stiffness: 300 }}
@@ -309,10 +309,42 @@ const DashboardPage = () => {
           variants={staggerContainer}
         >
           {[
-            { label: 'Total Chatbots', value: chatbots.length, icon: '🤖' },
-            { label: 'Active', value: chatbots.filter(b => b.status === 'active').length, icon: '✅' },
-            { label: 'Inactive', value: chatbots.filter(b => b.status === 'inactive').length, icon: '💤' },
-            { label: 'Created', value: chatbots.length > 0 ? 'Today' : '-', icon: '📅' }
+            {
+              label: 'Total Chatbots',
+              value: chatbots.length,
+              icon: (
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              )
+            },
+            {
+              label: 'Active',
+              value: chatbots.filter(b => b.status === 'active').length,
+              icon: (
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              )
+            },
+            {
+              label: 'Inactive',
+              value: chatbots.filter(b => b.status === 'inactive').length,
+              icon: (
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              )
+            },
+            {
+              label: 'Created',
+              value: chatbots.length > 0 ? 'Today' : '-',
+              icon: (
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              )
+            }
           ].map((stat, index) => (
             <motion.div
               key={index}
@@ -325,11 +357,13 @@ const DashboardPage = () => {
               whileHover={{
                 scale: 1.02,
                 y: -5,
-                boxShadow: theme === 'dark' ? '0 10px 40px rgba(20, 184, 166, 0.15)' : '0 10px 40px rgba(20, 184, 166, 0.1)',
+                boxShadow: theme === 'dark' ? '0 10px 40px rgba(139, 92, 246, 0.15)' : '0 10px 40px rgba(139, 92, 246, 0.1)',
                 transition: { type: 'spring', stiffness: 300 }
               }}
             >
-              <div className="text-3xl mb-3">{stat.icon}</div>
+              <div className="mb-3" style={{ color: colors.accent }}>
+                {stat.icon}
+              </div>
               <div className="text-2xl font-bold mb-1" style={{ color: colors.accent }}>
                 {stat.value}
               </div>
@@ -359,7 +393,7 @@ const DashboardPage = () => {
               whileHover={{
                 scale: 1.02,
                 y: -5,
-                boxShadow: theme === 'dark' ? '0 15px 40px rgba(20, 184, 166, 0.2)' : '0 15px 40px rgba(20, 184, 166, 0.1)',
+                boxShadow: theme === 'dark' ? '0 15px 40px rgba(139, 92, 246, 0.2)' : '0 15px 40px rgba(139, 92, 246, 0.1)',
                 transition: { type: 'spring', stiffness: 300 }
               }}
             >
@@ -377,11 +411,13 @@ const DashboardPage = () => {
               {/* Chatbot Icon */}
               <motion.div
                 className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4"
-                style={{ backgroundColor: `${chatbot.chat_color || colors.accent}20` }}
+                style={{ backgroundColor: `${colors.accent}20` }}
                 whileHover={{ rotate: 5, scale: 1.05 }}
                 transition={{ type: 'spring', stiffness: 300 }}
               >
-                <span className="text-3xl">🤖</span>
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: colors.accent }}>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
               </motion.div>
 
               {/* Chatbot Info */}
@@ -398,7 +434,7 @@ const DashboardPage = () => {
                   href={`/chatbots/${chatbot.id}/customize`}
                   className="flex-1 py-2 px-4 rounded-lg font-semibold text-sm text-center hover:opacity-90 transition-opacity"
                   style={{
-                    backgroundColor: chatbot.chat_color || colors.accent,
+                    backgroundColor: colors.accent,
                     color: theme === 'dark' ? '#0B0C10' : '#fff'
                   }}
                 >
@@ -408,7 +444,7 @@ const DashboardPage = () => {
                 <motion.button
                   onClick={() => toggleBotStatus(chatbot.id)}
                   className="p-2 rounded-lg"
-                  style={{ backgroundColor: theme === 'dark' ? 'rgba(20, 184, 166, 0.1)' : 'rgba(20, 184, 166, 0.1)' }}
+                  style={{ backgroundColor: theme === 'dark' ? 'rgba(139, 92, 246, 0.1)' : 'rgba(139, 92, 246, 0.1)' }}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -452,13 +488,13 @@ const DashboardPage = () => {
             whileHover={{
               scale: 1.02,
               borderColor: colors.accent,
-              backgroundColor: theme === 'dark' ? 'rgba(20, 184, 166, 0.05)' : 'rgba(20, 184, 166, 0.05)'
+              backgroundColor: theme === 'dark' ? 'rgba(139, 92, 246, 0.05)' : 'rgba(139, 92, 246, 0.05)'
             }}
             transition={{ type: 'spring', stiffness: 300 }}
           >
             <motion.div
               className="w-20 h-20 rounded-2xl flex items-center justify-center mb-4"
-              style={{ backgroundColor: theme === 'dark' ? 'rgba(20, 184, 166, 0.1)' : 'rgba(20, 184, 166, 0.1)' }}
+              style={{ backgroundColor: theme === 'dark' ? 'rgba(139, 92, 246, 0.1)' : 'rgba(139, 92, 246, 0.1)' }}
               whileHover={{ rotate: 90, scale: 1.05 }}
               transition={{ type: 'spring', stiffness: 300 }}
             >

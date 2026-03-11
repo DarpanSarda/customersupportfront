@@ -50,9 +50,10 @@ CREATE TRIGGER update_users_updated_at
 CREATE TABLE IF NOT EXISTS chatbots (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  tenant_id VARCHAR(255),
   name VARCHAR(255) NOT NULL,
   status VARCHAR(20) DEFAULT 'inactive' CHECK (status IN ('active', 'inactive')),
-  created_at TIMESTAMP WITH TIME Z  ONE DEFAULT CURRENT_TIMESTAMP,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 
   -- Branding

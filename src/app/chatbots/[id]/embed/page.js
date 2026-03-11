@@ -33,20 +33,20 @@ export default function EmbedPage({ params }) {
   return (
     <div className="p-8 rounded-2xl" style={{ backgroundColor: colors.card, border: `1px solid ${colors.border}` }}>
       <div className="flex items-center gap-4 mb-6">
-        <div className="w-16 h-16 rounded-2xl flex items-center justify-center" style={{ backgroundColor: 'rgba(20, 184, 166, 0.1)' }}>
+        <div className="w-16 h-16 rounded-2xl flex items-center justify-center" style={{ backgroundColor: theme === 'dark' ? 'rgba(139, 92, 246, 0.1)' : 'rgba(139, 92, 246, 0.1)' }}>
           <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: colors.accent }}>
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
           </svg>
         </div>
         <div>
-          <h3 className="text-2xl font-bold" style={{ color: colors.text }}>Embed Script</h3>
+          <h3 className="text-2xl font-bold" style={{ color: colors.text }}>Embed on Website</h3>
           <p style={{ color: colors.textSecondary }}>Add this chatbot to your website</p>
         </div>
       </div>
 
       <div className="space-y-6">
         {/* Instructions */}
-        <div className="p-6 rounded-xl" style={{ backgroundColor: 'rgba(20, 184, 166, 0.05)' }}>
+        <div className="p-6 rounded-xl" style={{ backgroundColor: theme === 'dark' ? 'rgba(139, 92, 246, 0.05)' : 'rgba(139, 92, 246, 0.05)' }}>
           <h4 className="font-semibold mb-3" style={{ color: colors.text }}>How to embed:</h4>
           <ol className="space-y-2 text-sm" style={{ color: colors.textSecondary }}>
             <li className="flex gap-2">
@@ -98,7 +98,7 @@ export default function EmbedPage({ params }) {
         </div>
 
         {/* Configuration Preview */}
-        <div className="p-6 rounded-xl" style={{ backgroundColor: 'rgba(20, 184, 166, 0.05)' }}>
+        <div className="p-6 rounded-xl" style={{ backgroundColor: theme === 'dark' ? 'rgba(139, 92, 246, 0.05)' : 'rgba(139, 92, 246, 0.05)' }}>
           <h4 className="font-semibold mb-4" style={{ color: colors.text }}>Current Configuration</h4>
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>

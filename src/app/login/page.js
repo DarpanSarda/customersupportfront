@@ -231,7 +231,7 @@ const LoginPage = () => {
             <Link
               href="/register"
               className="font-semibold hover:opacity-80 transition-opacity"
-              style={{ color: '#66FCF1' }}
+              style={{ color: colors.accent }}
             >
               Sign up
             </Link>

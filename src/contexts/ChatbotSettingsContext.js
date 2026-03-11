@@ -25,12 +25,12 @@ const defaultSettings = {
     header_text: ''
   },
   appearance: {
-    chat_color: '#14b8a6',           // Teal accent
+    chat_color: '#8b5cf6',           // Purple accent
     font_color: '#e4e4e7',
     font_family: 'Inter, sans-serif',
     bubble_style: 'rounded',
-    bot_message_color: '#14b8a6',    // Teal
-    user_message_color: '#2dd4bf',   // Lighter teal
+    bot_message_color: '#8b5cf6',    // Purple
+    user_message_color: '#a78bfa',   // Lighter purple
     chat_background_color: '#18181b',
     chat_background_image: ''
   },
@@ -45,13 +45,13 @@ const defaultSettings = {
     default_language: 'en'
   },
   sendButton: {
-    send_button_color: '#14b8a6',    // Teal
+    send_button_color: '#8b5cf6',    // Purple
     send_button_icon: 'arrow',
     send_button_style: 'rounded'
   },
   loading: {
     loading_indicator_type: 'typing-dots',
-    loading_indicator_color: '#14b8a6', // Teal
+    loading_indicator_color: '#8b5cf6', // Purple
     loading_text: 'Typing...'
   },
   statusBehavior: {
@@ -105,7 +105,7 @@ const defaultSettings = {
     notification_sound_url: ''
   },
   previewMessages: {
-    preview_bot_message_1: '👋 Hello! How can I help you today?',
+    preview_bot_message_1: 'Hello! How can I help you today?',
     preview_user_message: 'I have a question about your services.',
     preview_bot_message_2: "Sure! I'd be happy to help. What would you like to know?"
   }

@@ -46,9 +46,11 @@ const CreateChatbotWizard = ({ onClose, onCreate }) => {
         <button
           onClick={onClose}
           className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity"
-          style={{ backgroundColor: theme === 'dark' ? 'rgba(102, 252, 241, 0.1)' : 'rgba(8, 145, 178, 0.1)', color: colors.text }}
+          style={{ backgroundColor: theme === 'dark' ? 'rgba(139, 92, 246, 0.1)' : 'rgba(139, 92, 246, 0.1)', color: colors.text }}
         >
-          ✕
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
         </button>
 
         {/* Header */}
@@ -57,9 +59,11 @@ const CreateChatbotWizard = ({ onClose, onCreate }) => {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             className="w-20 h-20 rounded-2xl flex items-center justify-center mb-6 mx-auto"
-            style={{ backgroundColor: theme === 'dark' ? 'rgba(102, 252, 241, 0.1)' : 'rgba(8, 145, 178, 0.1)' }}
+            style={{ backgroundColor: theme === 'dark' ? 'rgba(139, 92, 246, 0.1)' : 'rgba(139, 92, 246, 0.1)' }}
           >
-            <span className="text-4xl">🤖</span>
+            <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: colors.accent }}>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
           </motion.div>
           <h2 className="text-2xl font-bold text-center mb-2" style={{ color: colors.text }}>
             Create New Chatbot
@@ -90,9 +94,9 @@ const CreateChatbotWizard = ({ onClose, onCreate }) => {
             />
           </div>
 
-          <div className="p-4 rounded-xl" style={{ backgroundColor: theme === 'dark' ? 'rgba(102, 252, 241, 0.1)' : 'rgba(8, 145, 178, 0.1)' }}>
+          <div className="p-4 rounded-xl" style={{ backgroundColor: theme === 'dark' ? 'rgba(139, 92, 246, 0.1)' : 'rgba(139, 92, 246, 0.1)' }}>
             <p className="text-sm text-center" style={{ color: colors.text }}>
-              ✨ You can customize appearance, colors, and other settings after creation
+              You can customize appearance, colors, and other settings after creation
             </p>
           </div>
 
@@ -117,7 +121,7 @@ const CreateChatbotWizard = ({ onClose, onCreate }) => {
               disabled={creating || !name.trim()}
               className="flex-1 py-3 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
               style={{
-                backgroundColor: name.trim() ? colors.accent : theme === 'dark' ? 'rgba(102, 252, 241, 0.3)' : 'rgba(8, 145, 178, 0.3)',
+                backgroundColor: name.trim() ? colors.accent : theme === 'dark' ? 'rgba(139, 92, 246, 0.3)' : 'rgba(139, 92, 246, 0.3)',
                 color: theme === 'dark' ? '#0B0C10' : '#fff'
               }}
               whileHover={creating || !name.trim() ? {} : { scale: 1.02 }}

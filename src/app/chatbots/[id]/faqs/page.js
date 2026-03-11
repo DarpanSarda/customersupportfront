@@ -4,8 +4,6 @@ import { useState, useEffect, use, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Search, Plus, Edit2, Trash2, ToggleLeft, ToggleRight, X, Upload, FileText, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useTheme } from '@/contexts/ThemeContext'
-import Papa from 'papaparse'
-import * as XLSX from 'xlsx'
 
 export default function FAQsPage({ params }) {
   const { id } = use(params)
@@ -34,6 +32,7 @@ export default function FAQsPage({ params }) {
   const [formData, setFormData] = useState({
     question: '',
     answer: '',
+    category: 'faq',
     order_index: 1
   })
 
@@ -112,6 +111,7 @@ export default function FAQsPage({ params }) {
       setFormData({
         question: faq.question,
         answer: faq.answer,
+        category: faq.category || 'general',
         order_index: faq.order_index
       })
     } else {
@@ -119,6 +119,7 @@ export default function FAQsPage({ params }) {
       setFormData({
         question: '',
         answer: '',
+        category: 'general',
         order_index: faqs.length + 1
       })
     }
@@ -131,6 +132,7 @@ export default function FAQsPage({ params }) {
     setFormData({
       question: '',
       answer: '',
+      category: 'general',
       order_index: 1
     })
   }
@@ -211,84 +213,46 @@ export default function FAQsPage({ params }) {
     const selectedFile = e.target.files[0]
     if (!selectedFile) return
 
-    setFile(selectedFile)
     const fileExtension = selectedFile.name.split('.').pop().toLowerCase()
 
-    if (fileExtension === 'csv') {
-      parseCSV(selectedFile)
-    } else if (fileExtension === 'xlsx' || fileExtension === 'xls') {
-      parseXLSX(selectedFile)
-    } else {
+    if (fileExtension !== 'csv' && fileExtension !== 'xlsx' && fileExtension !== 'xls') {
       alert('Please upload a CSV or Excel file')
+      return
     }
-  }
 
-  const parseCSV = (file) => {
-    Papa.parse(file, {
-      header: true,
-      skipEmptyLines: true,
-      complete: (results) => {
-        const parsedFaqs = results.data.map((row, index) => ({
-          question: row.question || row.Question || '',
-          answer: row.answer || row.Answer || '',
-          order_index: faqs.length + index + 1
-        })).filter(faq => faq.question && faq.answer)
-        setImportedFaqs(parsedFaqs)
-      },
-      error: (error) => {
-        console.error('CSV parsing error:', error)
-        alert('Failed to parse CSV file')
-      }
-    })
-  }
-
-  const parseXLSX = (file) => {
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      const data = new Uint8Array(e.target.result)
-      const workbook = XLSX.read(data, { type: 'array' })
-      const firstSheet = workbook.Sheets[workbook.SheetNames[0]]
-      const jsonData = XLSX.utils.sheet_to_json(firstSheet)
-
-      const parsedFaqs = jsonData.map((row, index) => ({
-        question: row.question || row.Question || '',
-        answer: row.answer || row.Answer || '',
-        order_index: faqs.length + index + 1
-      })).filter(faq => faq.question && faq.answer)
-      setImportedFaqs(parsedFaqs)
-    }
-    reader.onerror = () => {
-      alert('Failed to read Excel file')
-    }
-    reader.readAsArrayBuffer(file)
+    setFile(selectedFile)
+    setImportedFaqs([{ name: selectedFile.name }])
   }
 
   const handleBulkImport = async () => {
-    if (importedFaqs.length === 0) {
-      alert('No FAQs to import')
+    if (!file) {
+      alert('Please select a file to import')
       return
     }
 
     setImporting(true)
     try {
+      const formData = new FormData()
+      formData.append('file', file)
+
       const response = await fetch(`/api/chatbots/${id}/faqs/bulk`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ faqs: importedFaqs })
+        body: formData
       })
 
       if (response.ok) {
         const data = await response.json()
-        setFaqs([...faqs, ...data.faqs])
+        await fetchFAQs()
         setShowBulkModal(false)
         setImportedFaqs([])
         setFile(null)
         if (fileInputRef.current) {
           fileInputRef.current.value = ''
         }
-        alert(`Successfully imported ${importedFaqs.length} FAQs`)
+        alert(data.message || 'FAQs imported successfully')
       } else {
-        alert('Failed to import FAQs')
+        const errorData = await response.json()
+        alert(errorData.error || 'Failed to import FAQs')
       }
     } catch (error) {
       console.error('Failed to import FAQs:', error)
@@ -305,7 +269,6 @@ export default function FAQsPage({ params }) {
 
   const handleCloseBulkModal = () => {
     setShowBulkModal(false)
-    setImportedFaqs([])
     setFile(null)
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
@@ -316,7 +279,7 @@ export default function FAQsPage({ params }) {
     return (
       <div className="flex items-center justify-center h-screen" style={{ background: colors.bg }}>
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-500 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
           <p style={{ color: colors.textSecondary }}>Loading FAQs...</p>
         </div>
       </div>
@@ -459,6 +422,15 @@ export default function FAQsPage({ params }) {
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
+                      {faq.category && (
+                        <span className="px-3 py-1 rounded-lg text-xs font-medium capitalize"
+                          style={{
+                            background: colors.accent + '20',
+                            color: colors.accent
+                          }}>
+                          {faq.category}
+                        </span>
+                      )}
                       {!faq.is_active && (
                         <span className="px-3 py-1 rounded-lg text-xs font-medium bg-gray-500/20 text-gray-400">
                           Inactive
@@ -624,6 +596,29 @@ export default function FAQsPage({ params }) {
                     />
                   </div>
 
+                  <div>
+                    <label className="block text-sm font-medium mb-2" style={{ color: colors.text }}>Category</label>
+                    <select
+                      value={formData.category}
+                      onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                      className="w-full px-4 py-3 rounded-xl border outline-none focus:ring-2 transition-all cursor-pointer"
+                      style={{
+                        background: colors.bg,
+                        borderColor: colors.border,
+                        color: colors.text
+                      }}
+                    >
+                      <option value="general" className={theme === 'dark' ? 'bg-zinc-800' : 'bg-white'}>General</option>
+                      <option value="shipping" className={theme === 'dark' ? 'bg-zinc-800' : 'bg-white'}>Shipping</option>
+                      <option value="returns" className={theme === 'dark' ? 'bg-zinc-800' : 'bg-white'}>Returns</option>
+                      <option value="refund" className={theme === 'dark' ? 'bg-zinc-800' : 'bg-white'}>Refund</option>
+                      <option value="payment" className={theme === 'dark' ? 'bg-zinc-800' : 'bg-white'}>Payment</option>
+                      <option value="account" className={theme === 'dark' ? 'bg-zinc-800' : 'bg-white'}>Account</option>
+                      <option value="support" className={theme === 'dark' ? 'bg-zinc-800' : 'bg-white'}>Support</option>
+                      <option value="billing" className={theme === 'dark' ? 'bg-zinc-800' : 'bg-white'}>Billing</option>
+                    </select>
+                  </div>
+
                   <div className="flex gap-3 pt-4">
                     <motion.button
                       type="button"
@@ -715,22 +710,29 @@ export default function FAQsPage({ params }) {
                         {file ? file.name : 'Click to upload or drag and drop'}
                       </p>
                       <p className="text-sm" style={{ color: colors.textSecondary }}>
-                        CSV or XLSX file with columns: question, answer
+                        CSV or XLSX file with columns: question, answer, category
                       </p>
                     </motion.label>
                   </div>
                 </div>
 
-                {/* Preview Section */}
-                {importedFaqs.length > 0 && (
-                  <div className="mb-6">
-                    <div className="flex items-center justify-between mb-3">
-                      <h3 className="text-lg font-semibold" style={{ color: colors.text }}>
-                        Preview ({importedFaqs.length} FAQs)
-                      </h3>
+                {/* File Info */}
+                {file && (
+                  <div className="mb-6 p-4 rounded-lg" style={{ background: colors.bg, borderColor: colors.accent, borderWidth: '1px' }}>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: colors.accent + '20' }}>
+                          <FileText size={20} style={{ color: colors.accent }} />
+                        </div>
+                        <div>
+                          <p className="font-medium" style={{ color: colors.text }}>{file.name}</p>
+                          <p className="text-xs" style={{ color: colors.textSecondary }}>
+                            {(file.size / 1024).toFixed(2)} KB
+                          </p>
+                        </div>
+                      </div>
                       <button
                         onClick={() => {
-                          setImportedFaqs([])
                           setFile(null)
                           if (fileInputRef.current) {
                             fileInputRef.current.value = ''
@@ -739,25 +741,8 @@ export default function FAQsPage({ params }) {
                         className="text-sm px-3 py-1 rounded-lg"
                         style={{ color: '#ef4444', background: 'rgba(239, 68, 68, 0.1)' }}
                       >
-                        Clear
+                        Remove
                       </button>
-                    </div>
-
-                    <div className="space-y-2 max-h-64 overflow-y-auto rounded-lg p-2" style={{ background: colors.bg }}>
-                      {importedFaqs.map((faq, index) => (
-                        <div
-                          key={index}
-                          className="p-3 rounded-lg border"
-                          style={{ borderColor: colors.border }}
-                        >
-                          <p className="font-medium text-sm truncate mb-1" style={{ color: colors.text }}>
-                            {faq.question}
-                          </p>
-                          <p className="text-xs truncate" style={{ color: colors.textSecondary }}>
-                            {faq.answer}
-                          </p>
-                        </div>
-                      ))}
                     </div>
                   </div>
                 )}
@@ -777,11 +762,11 @@ export default function FAQsPage({ params }) {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={handleBulkImport}
-                    disabled={importedFaqs.length === 0 || importing}
+                    disabled={!file || importing}
                     className="flex-1 px-6 py-3 rounded-xl font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     style={{ background: colors.accent, color: 'white' }}
                   >
-                    {importing ? 'Importing...' : `Import ${importedFaqs.length} FAQs`}
+                    {importing ? 'Importing...' : 'Import File'}
                   </motion.button>
                 </div>
 
@@ -789,11 +774,14 @@ export default function FAQsPage({ params }) {
                 <div className="mt-6 p-4 rounded-lg" style={{ background: colors.bg, borderColor: colors.border, borderWidth: '1px' }}>
                   <p className="text-sm font-medium mb-2" style={{ color: colors.text }}>Expected CSV Format:</p>
                   <pre className="text-xs overflow-x-auto p-2 rounded" style={{ background: colors.card, color: colors.textSecondary }}>
-{`question,answer
-"What are your hours?","We're open 9-5 EST"
-"How to reset password?","Click Forgot Password"
-"What payment methods?","Visa, MasterCard, PayPal"`}
+{`question,answer,category
+"What are your hours?","We're open 9-5 EST","shipping"
+"How to reset password?","Click Forgot Password","account"
+"What payment methods?","Visa, MasterCard, PayPal","payment"`}
                   </pre>
+                  <p className="text-xs mt-2" style={{ color: colors.textSecondary }}>
+                    Supported categories: shipping, returns, refund, payment, account, general
+                  </p>
                 </div>
               </motion.div>
             </motion.div>

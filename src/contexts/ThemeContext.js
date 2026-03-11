@@ -39,32 +39,40 @@ export const ThemeProvider = ({ children }) => {
 
   const colors = {
     dark: {
-      // Minimal Dark - Soft, professional dark theme
-      bg: '#09090b',           // Very dark gray (not pure black)
-      card: '#18181b',         // Card background
-      border: '#27272a',       // Subtle borders
-      accent: '#14b8a6',       // Teal accent (calm, professional)
-      accentSecondary: '#2dd4bf',
-      text: '#e4e4e7',         // Light gray text (not white)
+      // Modern Dark Theme - Purple Accent
+      bg: '#0a0a0f',           // Very dark background
+      card: '#15151a',         // Dark card background
+      cardHover: '#1a1a20',    // Card hover state
+      border: '#2a2a35',       // Subtle borders
+      accent: '#8b5cf6',       // Purple accent
+      accentHover: '#a78bfa',  // Lighter purple for hover
+      text: '#f4f4f5',         // Light text
       textSecondary: '#a1a1aa', // Muted text
-      inputBg: '#18181b',
-      success: '#22c55e',
+      inputBg: '#15151a',      // Input background
+      inputBorder: '#3f3f46',  // Input border
+      success: '#10b981',
       error: '#ef4444',
-      warning: '#f59e0b'
+      warning: '#f59e0b',
+      shadow: 'rgba(139, 92, 246, 0.15)',
+      overlay: 'rgba(10, 10, 15, 0.8)'
     },
     light: {
-      // Minimal Light - Clean, modern light theme
-      bg: '#ffffff',           // Pure white
-      card: '#fafafa',         // Very light gray
-      border: '#e5e5e5',       // Light borders
-      accent: '#14b8a6',       // Same teal accent
-      accentSecondary: '#2dd4bf',
-      text: '#18181b',         // Nearly black text
-      textSecondary: '#71717a', // Muted text
-      inputBg: '#ffffff',
-      success: '#22c55e',
+      // Modern Light Theme - Purple Accent
+      bg: '#f8f8fc',           // Soft light background with purple tint
+      card: '#ffffff',         // White cards
+      cardHover: '#f5f5ff',    // Card hover state with purple tint
+      border: '#e8e8f0',       // Light borders
+      accent: '#8b5cf6',       // Purple accent
+      accentHover: '#a78bfa',  // Lighter purple for hover
+      text: '#1a1a2e',         // Dark text
+      textSecondary: '#6b6b7b', // Muted text
+      inputBg: '#ffffff',      // White input
+      inputBorder: '#d4d4dc',  // Input border
+      success: '#10b981',
       error: '#ef4444',
-      warning: '#f59e0b'
+      warning: '#f59e0b',
+      shadow: 'rgba(139, 92, 246, 0.1)',
+      overlay: 'rgba(0, 0, 0, 0.5)'
     }
   }
 

@@ -463,7 +463,7 @@ export default function CustomizePage({ params }) {
                   type="text"
                   value={settings.appearance.chat_color}
                   onChange={(e) => updateSetting('appearance', 'chat_color', e.target.value)}
-                  placeholder="#66FCF1"
+                  placeholder="#8b5cf6"
                   className="flex-1 px-4 py-3 rounded-xl outline-none uppercase"
                   style={{
                     backgroundColor: colors.inputBg,
@@ -556,7 +556,7 @@ export default function CustomizePage({ params }) {
                   type="text"
                   value={settings.appearance.bot_message_color}
                   onChange={(e) => updateSetting('appearance', 'bot_message_color', e.target.value)}
-                  placeholder="#66FCF1"
+                  placeholder="#8b5cf6"
                   className="flex-1 px-4 py-3 rounded-xl outline-none uppercase"
                   style={{
                     backgroundColor: colors.inputBg,
@@ -580,7 +580,7 @@ export default function CustomizePage({ params }) {
                   type="text"
                   value={settings.appearance.user_message_color}
                   onChange={(e) => updateSetting('appearance', 'user_message_color', e.target.value)}
-                  placeholder="#45A29E"
+                  placeholder="#7c3aed"
                   className="flex-1 px-4 py-3 rounded-xl outline-none uppercase"
                   style={{
                     backgroundColor: colors.inputBg,
@@ -776,7 +776,7 @@ export default function CustomizePage({ params }) {
                   type="text"
                   value={settings.sendButton.send_button_color}
                   onChange={(e) => updateSetting('sendButton', 'send_button_color', e.target.value)}
-                  placeholder="#66FCF1"
+                  placeholder="#8b5cf6"
                   className="flex-1 px-4 py-3 rounded-xl outline-none uppercase"
                   style={{
                     backgroundColor: colors.inputBg,
@@ -878,7 +878,7 @@ export default function CustomizePage({ params }) {
                   type="text"
                   value={settings.loading.loading_indicator_color}
                   onChange={(e) => updateSetting('loading', 'loading_indicator_color', e.target.value)}
-                  placeholder="#66FCF1"
+                  placeholder="#8b5cf6"
                   className="flex-1 px-4 py-3 rounded-xl outline-none uppercase"
                   style={{
                     backgroundColor: colors.inputBg,
@@ -1794,7 +1794,7 @@ export default function CustomizePage({ params }) {
                         boxShadow: settings.bubble.bot_bubble_shadow ? '0 2px 8px rgba(0,0,0,0.15)' : 'none'
                       }}
                     >
-                      {settings.previewMessages.preview_bot_message_1 || '👋 Hello! How can I help you today?'}
+                      {settings.previewMessages.preview_bot_message_1 || 'Hello! How can I help you today?'}
                     </div>
                     {settings.layout.bot_message_side === 'right' && (
                       <div className="shrink-0">

@@ -1,48 +1,27 @@
 import { requireAuth } from '@/lib/auth'
+import { createClient } from '@supabase/supabase-js'
 
-// Mock FAQ data (will be replaced with database queries later)
-const MOCK_FAQS = [
-  {
-    id: '1',
-    question: 'What are your business hours?',
-    answer: 'We are open Monday through Friday, 9 AM to 5 PM EST. Our support team is available during these hours to assist you with any questions.',
-    category: 'General',
-    order_index: 1,
-    is_active: true
-  },
-  {
-    id: '2',
-    question: 'How do I reset my password?',
-    answer: 'To reset your password, click on the "Forgot Password" link on the login page. You will receive an email with instructions to create a new password.',
-    category: 'Account',
-    order_index: 2,
-    is_active: true
-  },
-  {
-    id: '3',
-    question: 'What payment methods do you accept?',
-    answer: 'We accept all major credit cards including Visa, MasterCard, and American Express. We also support PayPal and bank transfers for enterprise customers.',
-    category: 'Billing',
-    order_index: 3,
-    is_active: true
-  },
-  {
-    id: '4',
-    question: 'How can I contact customer support?',
-    answer: 'You can reach our customer support team through the contact form on our website, email us at support@example.com, or call us at 1-800-123-4567.',
-    category: 'Support',
-    order_index: 4,
-    is_active: true
-  },
-  {
-    id: '5',
-    question: 'What is your refund policy?',
-    answer: 'We offer a 30-day money-back guarantee on all our products. If you are not satisfied, contact our support team for a full refund.',
-    category: 'Billing',
-    order_index: 5,
-    is_active: true
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+)
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL
+
+// Helper function to get tenant_id from chatbot_id
+async function getTenantId(chatbotId) {
+  const { data: chatbot, error } = await supabase
+    .from('chatbots')
+    .select('tenant_id')
+    .eq('id', chatbotId)
+    .single()
+
+  if (error || !chatbot) {
+    return null
   }
-]
+
+  return chatbot.tenant_id || chatbotId
+}
 
 // GET - Fetch all FAQs for a chatbot
 export async function GET(request, { params }) {
@@ -54,19 +33,38 @@ export async function GET(request, { params }) {
 
   const { id } = await params
 
-  // Verify chatbot ownership
   try {
-    // For now, return mock data
-    // In production, this would query the database:
-    // const { data: faqs } = await supabase
-    //   .from('faqs')
-    //   .select('*')
-    //   .eq('chatbot_id', id)
-    //   .order('order_index', { ascending: true })
+    // Get tenant_id from chatbot
+    const tenantId = await getTenantId(id)
+
+    if (!tenantId) {
+      return Response.json(
+        { error: 'Chatbot not found' },
+        { status: 404 }
+      )
+    }
+
+    // Fetch from external API
+    const response = await fetch(`${API_URL}faq/${tenantId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch FAQs from external API')
+    }
+
+    const faqs = await response.json()
 
     return Response.json({
-      faqs: MOCK_FAQS,
-      total: MOCK_FAQS.length
+      faqs: faqs.map(f => ({
+        ...f,
+        is_active: true,
+        created_at: f.created_at || new Date().toISOString()
+      })),
+      total: faqs.length
     })
 
   } catch (error) {
@@ -90,7 +88,7 @@ export async function POST(request, { params }) {
 
   try {
     const body = await request.json()
-    const { question, answer, category, order_index } = body
+    const { question, answer, category } = body
 
     if (!question || !answer) {
       return Response.json(
@@ -99,39 +97,50 @@ export async function POST(request, { params }) {
       )
     }
 
-    // For now, return mock response
-    const newFaq = {
-      id: Date.now().toString(),
-      question,
-      answer,
-      category: category || 'General',
-      order_index: order_index || MOCK_FAQS.length + 1,
-      is_active: true,
-      created_at: new Date().toISOString()
+    // Get tenant_id from chatbot
+    const tenantId = await getTenantId(id)
+
+    if (!tenantId) {
+      return Response.json(
+        { error: 'Chatbot not found' },
+        { status: 404 }
+      )
     }
 
-    // In production:
-    // const { data, error } = await supabase
-    //   .from('faqs')
-    //   .insert({
-    //     chatbot_id: id,
-    //     question,
-    //     answer,
-    //     category,
-    //     order_index
-    //   })
-    //   .select()
-    //   .single()
+    // Create FAQ via external API
+    const response = await fetch(`${API_URL}faq/create`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        tenant_id: tenantId,
+        question,
+        answer,
+        category: category || 'general'
+      })
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.detail || 'Failed to create FAQ')
+    }
+
+    const faq = await response.json()
 
     return Response.json({
       message: 'FAQ created successfully',
-      faq: newFaq
+      faq: {
+        ...faq,
+        is_active: true,
+        created_at: new Date().toISOString()
+      }
     })
 
   } catch (error) {
     console.error('FAQ creation error:', error)
     return Response.json(
-      { error: 'Failed to create FAQ' },
+      { error: error.message || 'Failed to create FAQ' },
       { status: 500 }
     )
   }
@@ -149,7 +158,7 @@ export async function PUT(request, { params }) {
 
   try {
     const body = await request.json()
-    const { faqId, question, answer, category, order_index, is_active } = body
+    const { faqId, question, answer, category, is_active } = body
 
     if (!faqId) {
       return Response.json(
@@ -158,26 +167,50 @@ export async function PUT(request, { params }) {
       )
     }
 
-    // For now, return mock response
-    const updatedFaq = {
-      id: faqId,
-      question: question || 'Updated question',
-      answer: answer || 'Updated answer',
-      category: category || 'General',
-      order_index: order_index || 1,
-      is_active: is_active !== undefined ? is_active : true,
-      updated_at: new Date().toISOString()
+    // Get tenant_id from chatbot
+    const tenantId = await getTenantId(id)
+
+    if (!tenantId) {
+      return Response.json(
+        { error: 'Chatbot not found' },
+        { status: 404 }
+      )
     }
+
+    // Update FAQ via external API
+    const response = await fetch(`${API_URL}faq/${faqId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        tenant_id: tenantId,
+        question,
+        answer,
+        category: category || 'general'
+      })
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.detail || 'Failed to update FAQ')
+    }
+
+    const faq = await response.json()
 
     return Response.json({
       message: 'FAQ updated successfully',
-      faq: updatedFaq
+      faq: {
+        ...faq,
+        is_active: is_active !== undefined ? is_active : true,
+        updated_at: new Date().toISOString()
+      }
     })
 
   } catch (error) {
     console.error('FAQ update error:', error)
     return Response.json(
-      { error: 'Failed to update FAQ' },
+      { error: error.message || 'Failed to update FAQ' },
       { status: 500 }
     )
   }
@@ -204,7 +237,26 @@ export async function DELETE(request, { params }) {
       )
     }
 
-    // For now, return mock response
+    // Get tenant_id from chatbot
+    const tenantId = await getTenantId(id)
+
+    if (!tenantId) {
+      return Response.json(
+        { error: 'Chatbot not found' },
+        { status: 404 }
+      )
+    }
+
+    // Delete FAQ via external API
+    const response = await fetch(`${API_URL}faq/${tenantId}/${faqId}`, {
+      method: 'DELETE'
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.detail || 'Failed to delete FAQ')
+    }
+
     return Response.json({
       message: 'FAQ deleted successfully'
     })
@@ -212,7 +264,7 @@ export async function DELETE(request, { params }) {
   } catch (error) {
     console.error('FAQ deletion error:', error)
     return Response.json(
-      { error: 'Failed to delete FAQ' },
+      { error: error.message || 'Failed to delete FAQ' },
       { status: 500 }
     )
   }

@@ -120,11 +120,11 @@ const Page = () => {
               variants={fadeInUp}
               className="inline-block px-4 py-2 rounded-full mb-6"
               style={{
-                backgroundColor: theme === 'dark' ? 'rgba(20, 184, 166, 0.1)' : 'rgba(20, 184, 166, 0.1)',
+                backgroundColor: theme === 'dark' ? 'rgba(139, 92, 246, 0.1)' : 'rgba(139, 92, 246, 0.1)',
                 border: `1px solid ${colors.border}`
               }}
             >
-              <span style={{ color: colors.accent }}>✨ Next-Gen Customer Support</span>
+              <span style={{ color: colors.accent }}>Next-Gen Customer Support</span>
             </motion.div>
             <motion.h1
               variants={fadeInUp}
@@ -200,7 +200,7 @@ const Page = () => {
               variants={scaleIn}
               whileHover={{
                 scale: 1.05,
-                boxShadow: theme === 'dark' ? "0 0 30px rgba(20, 184, 166, 0.3)" : "0 10px 40px rgba(20, 184, 166, 0.1)",
+                boxShadow: theme === 'dark' ? "0 0 30px rgba(139, 92, 246, 0.3)" : "0 10px 40px rgba(139, 92, 246, 0.1)",
                 transition: { type: "spring", stiffness: 300 }
               }}
             >
@@ -250,32 +250,56 @@ const Page = () => {
         >
           {[
             {
-              icon: '🤖',
+              icon: (
+                <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              ),
               title: 'AI-Powered Responses',
               description: 'Intelligent chatbot that understands context and provides accurate solutions instantly.'
             },
             {
-              icon: '⚡',
+              icon: (
+                <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              ),
               title: 'Lightning Fast',
               description: 'Average response time under 2 seconds. No more frustrated customers waiting.'
             },
             {
-              icon: '🎯',
+              icon: (
+                <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              ),
               title: 'Smart Routing',
               description: 'Automatically route complex issues to the right human agents when needed.'
             },
             {
-              icon: '📊',
+              icon: (
+                <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+              ),
               title: 'Analytics Dashboard',
               description: 'Gain insights with comprehensive analytics and reporting tools.'
             },
             {
-              icon: '🌐',
+              icon: (
+                <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                </svg>
+              ),
               title: 'Multi-Channel',
               description: 'Seamless support across web, mobile, email, and social media platforms.'
             },
             {
-              icon: '🔒',
+              icon: (
+                <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+              ),
               title: 'Enterprise Security',
               description: 'Bank-grade encryption and compliance with major security standards.'
             }
@@ -291,12 +315,13 @@ const Page = () => {
               whileHover={{
                 scale: 1.05,
                 y: -5,
-                boxShadow: theme === 'dark' ? "0 10px 40px rgba(20, 184, 166, 0.2)" : "0 10px 40px rgba(20, 184, 166, 0.1)",
+                boxShadow: theme === 'dark' ? "0 10px 40px rgba(139, 92, 246, 0.2)" : "0 10px 40px rgba(139, 92, 246, 0.1)",
                 transition: { type: "spring", stiffness: 300 }
               }}
             >
               <motion.div
-                className="text-4xl mb-4"
+                className="mb-4"
+                style={{ color: colors.accent }}
                 animate={floatAnimation.visible}
               >
                 {feature.icon}
@@ -426,7 +451,7 @@ const Page = () => {
                 variants={scaleIn}
                 whileHover={{
                   scale: 1.05,
-                  boxShadow: theme === 'dark' ? "0 0 30px rgba(20, 184, 166, 0.5)" : "0 10px 30px rgba(20, 184, 166, 0.2)",
+                  boxShadow: theme === 'dark' ? "0 0 30px rgba(139, 92, 246, 0.5)" : "0 10px 30px rgba(139, 92, 246, 0.2)",
                   transition: { type: "spring", stiffness: 300 }
                 }}
                 whileTap={{ scale: 0.95 }}
@@ -444,7 +469,7 @@ const Page = () => {
               variants={scaleIn}
               whileHover={{
                 scale: 1.05,
-                boxShadow: theme === 'dark' ? "0 0 30px rgba(20, 184, 166, 0.3)" : "0 10px 30px rgba(20, 184, 166, 0.1)",
+                boxShadow: theme === 'dark' ? "0 0 30px rgba(139, 92, 246, 0.3)" : "0 10px 30px rgba(139, 92, 246, 0.1)",
                 transition: { type: "spring", stiffness: 300 }
               }}
               whileTap={{ scale: 0.95 }}
